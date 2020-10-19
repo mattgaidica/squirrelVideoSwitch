@@ -5,8 +5,8 @@ const int LEDPin = 10;
 bool exitRecording = false;
 bool onlyOnce = true;
 bool recordVideo = LOW;
-long interval = 0; // first time, reset below
-long previousMillis = 0;
+unsigned long interval = 0; // first time, reset below
+unsigned long previousMillis = 0;
 
 int brightness = 0;
 int fadeAmount = 5;
@@ -16,18 +16,15 @@ void setup() {
   pinMode(interruptPin, INPUT_PULLUP);
   pinMode(recordPin, INPUT);
   attachInterrupt(digitalPinToInterrupt(interruptPin), updateState, LOW);
-  Serial.begin(9600);
 }
 
 void loop() {
   if (recordVideo) {
     digitalWrite(LEDPin, LOW);
-    Serial.println("recording area...");
     unsigned long currentMillis = millis();
     if (currentMillis - previousMillis > interval) {
-      interval = 1000 * 10; // ms
+      interval = 1000 * 60 * 5; // ms
       previousMillis = currentMillis;
-      Serial.println("pressing record");
       pressRecord();
     }
     digitalWrite(LEDPin, HIGH);
